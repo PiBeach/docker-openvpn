@@ -1,7 +1,9 @@
 # Original credit: https://github.com/jpetazzo/dockvpn
 
 # Smallest base image
-FROM aarch64/alpine:3.5
+FROM docker.io/project31/aarch64-alpine-qemu:3.4
+
+RUN [ "cross-build-start" ]
 
 MAINTAINER Kyle Manna <kyle@kylemanna.com>
 
@@ -32,3 +34,5 @@ RUN chmod a+x /usr/local/bin/*
 
 # Add support for OTP authentication using a PAM module
 ADD ./otp/openvpn /etc/pam.d/
+
+RUN [ "cross-build-end" ]
