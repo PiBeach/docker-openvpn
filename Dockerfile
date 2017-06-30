@@ -1,7 +1,7 @@
 # Original credit: https://github.com/jpetazzo/dockvpn
 
 # Smallest base image
-FROM docker.io/project31/aarch64-alpine-qemu:test
+FROM docker.io/project31/aarch64-alpine-qemu:3.5-5
 
 RUN [ "cross-build-start" ]
 
