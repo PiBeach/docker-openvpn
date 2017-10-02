@@ -8,8 +8,8 @@
 #            - openvpn
 
 env:
-    - ARCH=x86     DOCKERFILE=Dockerfile         IMAGE=kurtstam/openvpn
-    - ARCH=aarch64 DOCKERFILE=Dockerfile.aarch64 IMAGE=project31/openvpn
+    - ARCH=x86     DOCKERFILE=Dockerfile         IMAGE=kylemanna/docker-openvpn
+    - ARCH=aarch64 DOCKERFILE=Dockerfile.aarch64 IMAGE=project31/aarch64-docker-openvpn
 
 services:
     - docker
