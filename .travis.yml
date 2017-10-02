@@ -7,6 +7,9 @@
 #        packages:
 #            - openvpn
 
+env:
+    - DOCKERFILE=Dockerfile IMAGE=kurtstam/openvpn
+
 services:
     - docker
 
@@ -19,8 +22,8 @@ install:
 # Assist with ci test debugging:
 #   - DEBUG=1
 before_script:
-    - image="kylemanna/openvpn"
-    - docker build -t "$image" .
+    - image="$IMAGE"
+    - docker build -f DOCKERFILE -t "$image" .
     - docker inspect "$image"
     - docker run --rm "$image" openvpn --version || true # why does it return 1?
     - docker run --rm "$image" openssl version
