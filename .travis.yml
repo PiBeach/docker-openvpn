@@ -8,8 +8,8 @@
 #            - openvpn
 
 env:
-    - DOCKERFILE=Dockerfile IMAGE=kurtstam/openvpn
-    - DOCKERFILE=Dockerfile.aarch64 IMAGE=aarch64/openvpn
+    - ARCH=x86     DOCKERFILE=Dockerfile         IMAGE=kurtstam/openvpn
+    - ARCH=aarch64 DOCKERFILE=Dockerfile.aarch64 IMAGE=project31/openvpn
 
 services:
     - docker
@@ -26,12 +26,12 @@ before_script:
     - image="$IMAGE"
     - docker build -f $DOCKERFILE -t "$image" .
     - docker inspect "$image"
-#    - docker run --rm "$image" openvpn --version || true # why does it return 1?
-#    - docker run --rm "$image" openssl version
+    - if [ "${ARCH}" == "x86" ]; then docker run --rm "$image" openvpn --version || true # why does it return 1?
+    - if [ "${ARCH}" == "x86" ]; then docker run --rm "$image" openssl version
 
 script:
-    - official-images/test/run.sh "$image"
-    - test/run.sh "$image"
+    - if [ "${ARCH}" == "x86" ]; then official-images/test/run.sh "$image"
+    - if [ "${ARCH}" == "x86" ]; then test/run.sh "$image"
 
 after_script:
     - docker images
