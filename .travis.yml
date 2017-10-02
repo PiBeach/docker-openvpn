@@ -9,6 +9,7 @@
 
 env:
     - DOCKERFILE=Dockerfile IMAGE=kurtstam/openvpn
+    - DOCKERFILE=Dockerfile.aarch64 IMAGE=aarch64/openvpn
 
 services:
     - docker
