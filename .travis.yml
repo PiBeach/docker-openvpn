@@ -6,7 +6,6 @@
 #            - ubuntu-toolchain-r-test
 #        packages:
 #            - openvpn
-os: osx
 
 env:
     - DOCKERFILE=Dockerfile IMAGE=kurtstam/openvpn
@@ -27,8 +26,8 @@ before_script:
     - image="$IMAGE"
     - docker build -f $DOCKERFILE -t "$image" .
     - docker inspect "$image"
-    - docker run --rm "$image" openvpn --version || true # why does it return 1?
-    - docker run --rm "$image" openssl version
+#    - docker run --rm "$image" openvpn --version || true # why does it return 1?
+#    - docker run --rm "$image" openssl version
 
 script:
     - official-images/test/run.sh "$image"
