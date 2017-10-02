@@ -23,14 +23,14 @@ install:
 #   - DEBUG=1
 before_script:
     - image="$IMAGE"
-    - docker build -f $DOCKERFILE -t "$image" .
+    - docker build -f $DOCKERFILE -t "$IMAGE" .
     - docker inspect "$image"
     - docker run --rm "$image" openvpn --version || true # why does it return 1?
     - docker run --rm "$image" openssl version
 
 script:
-    - official-images/test/run.sh "$image"
-    - test/run.sh "$image"
+    - official-images/test/run.sh "$IMAGE"
+    - test/run.sh "$IMAGE"
 
 after_script:
     - docker images
