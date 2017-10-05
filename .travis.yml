@@ -24,11 +24,11 @@ install:
 #   - DEBUG=1
 before_script:
 # prepare qemu
-    - docker run --rm --privileged multiarch/qemu-user-static:register --reset
+    - if [ $ARCH == 'aarch64' ]; docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
     - image="$IMAGE"
     - docker build -f $DOCKERFILE -t "$image" .
     - docker inspect "$image"
-    - docker run --rm "$image" openvpn --version || true; fi # why does it return 1?
+    - docker run --rm "$image" openvpn --version || true; # why does it return 1?
     - if [ $ARCH == 'x86' ]; then docker run --rm "$image" openssl version; fi
 
 script:
