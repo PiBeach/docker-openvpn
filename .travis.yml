@@ -24,7 +24,7 @@ install:
 #   - DEBUG=1
 before_script:
 # prepare qemu
-    - if [ $ARCH == 'aarch64' ]; docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
+    - if [ $ARCH == 'aarch64' ]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
     - image="$IMAGE"
     - docker build -f $DOCKERFILE -t "$image" .
     - docker inspect "$image"
