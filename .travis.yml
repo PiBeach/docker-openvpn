@@ -32,7 +32,7 @@ before_script:
     - docker run --rm "$image" openssl version; fi
 
 script:
-    - if [ $ARCH == 'x86' ]; then official-images/test/run.sh "$image"; fi
+    - official-images/test/run.sh "$image"; fi
     - if [ $ARCH == 'x86' ]; then test/run.sh "$image"; fi
 
 after_script:
