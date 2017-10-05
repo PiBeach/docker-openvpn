@@ -29,7 +29,7 @@ before_script:
     - docker build -f $DOCKERFILE -t "$image" .
     - docker inspect "$image"
     - docker run --rm "$image" openvpn --version || true; # why does it return 1?
-    - if [ $ARCH == 'x86' ]; then docker run --rm "$image" openssl version; fi
+    - docker run --rm "$image" openssl version; fi
 
 script:
     - if [ $ARCH == 'x86' ]; then official-images/test/run.sh "$image"; fi
