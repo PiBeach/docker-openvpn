@@ -6,12 +6,7 @@
 #            - ubuntu-toolchain-r-test
 #        packages:
 #            - openvpn
-before_install:
-  - sudo rm /usr/local/bin/docker
-  - curl -L https://download.docker.com/linux/static/stable/x86_64/docker-17.09.0-ce.tgz | tar xz
-  - chmod +x docker/docker
-  - sudo mv docker/docker /usr/local/bin/docker
-  - rm -fr docker
+sudo: required
 
 env:
     - ARCH=x86     FROM=alpine:latest                       IMAGE=kylemanna/docker-openvpn
@@ -21,6 +16,8 @@ services:
     - docker
 
 before_install:
+    - sudo apt-get update
+    - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
     - docker --version
 
 install:
