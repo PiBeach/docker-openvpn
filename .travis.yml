@@ -11,6 +11,9 @@ sudo: required
 env:
   global:
     - BASEIMAGE=project31/docker-openvpn
+  matrix:
+    - ARCH=x86     FROM=alpine:latest                        IMAGE=$BASEIMAGE:x86_64
+    - ARCH=aarch64 FROM=project31/aarch64-alpine-qemu:3.5-7  IMAGE=$BASEIMAGE:aarch64
 
 services:
     - docker
@@ -23,27 +26,20 @@ before_install:
 install:
     - git clone https://github.com/docker-library/official-images.git official-images
 
-stages:
-  - build
-  - manifest
+script:
+  - if [ $ARCH == 'aarch64' ]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
+  - image="$IMAGE"
+  - docker build --build-arg from=$FROM -t "$image" .
+  - docker inspect "$image"
+  - docker run --rm "$image" openvpn --version || true; # why does it return 1?
+  - docker run --rm "$image" openssl version
+  - official-images/test/run.sh "$image"
+  - test/run.sh "$image"
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+  - docker push "$image"
 
 jobs:
   include:
-    - stage: build
-      env:
-        - ARCH=x86     FROM=alpine:latest                        IMAGE=$BASEIMAGE:x86_64
-        - ARCH=aarch64 FROM=project31/aarch64-alpine-qemu:3.5-7  IMAGE=$BASEIMAGE:aarch64
-      script:
-      - if [ $ARCH == 'aarch64' ]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
-      - image="$IMAGE"
-      - docker build --build-arg from=$FROM -t "$image" .
-      - docker inspect "$image"
-      - docker run --rm "$image" openvpn --version || true; # why does it return 1?
-      - docker run --rm "$image" openssl version
-      - official-images/test/run.sh "$image"
-      - test/run.sh "$image"
-      - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-      - docker push "$image"
     - stage: manifest
       env:
         - ARCH=manifest FROM=$BASEIMAGE IMAGE=$BASEIMAGE
