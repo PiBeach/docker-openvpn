@@ -11,9 +11,6 @@ sudo: required
 env:
   global:
     - BASEIMAGE=project31/docker-openvpn
-  matrix:
-    - ARCH=x86     FROM=alpine:latest                        IMAGE=$BASEIMAGE:x86_64
-    - ARCH=aarch64 FROM=project31/aarch64-alpine-qemu:3.5-7  IMAGE=$BASEIMAGE:aarch64
 
 services:
     - docker
@@ -33,6 +30,9 @@ stages:
 jobs:
   include:
     - stage: build
+      env:
+        - ARCH=x86     FROM=alpine:latest                        IMAGE=$BASEIMAGE:x86_64
+        - ARCH=aarch64 FROM=project31/aarch64-alpine-qemu:3.5-7  IMAGE=$BASEIMAGE:aarch64
       script:
       - if [ $ARCH == 'aarch64' ]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
       - image="$IMAGE"
