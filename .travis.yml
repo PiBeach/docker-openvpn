@@ -8,8 +8,8 @@
 #            - openvpn
 
 env:
-    - ARCH=x86     DOCKERFILE=Dockerfile         IMAGE=kylemanna/docker-openvpn
-    - ARCH=aarch64 DOCKERFILE=Dockerfile.aarch64 IMAGE=project31/aarch64-docker-openvpn
+    - ARCH=x86     FROM=alpine:latest                       IMAGE=kylemanna/docker-openvpn
+    - ARCH=aarch64 FROM=project31/aarch64-alpine-qemu:3.5-7 IMAGE=project31/aarch64-docker-openvpn
 
 services:
     - docker
@@ -26,7 +26,7 @@ before_script:
 # prepare qemu
     - if [ $ARCH == 'aarch64' ]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
     - image="$IMAGE"
-    - docker build -f $DOCKERFILE -t "$image" .
+    - docker build --build-arg from=$FROM -t "$image" .
     - docker inspect "$image"
     - docker run --rm "$image" openvpn --version || true; # why does it return 1?
     - docker run --rm "$image" openssl version
