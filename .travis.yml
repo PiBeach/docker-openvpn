@@ -11,8 +11,9 @@ sudo: required
 env:
   global:
     - BASEIMAGE=project31/docker-openvpn
-  - ARCH=x86     FROM=alpine:latest                        IMAGE=$BASEIMAGE:x86_64
-  - ARCH=aarch64 FROM=project31/aarch64-alpine-qemu:3.5-7  IMAGE=$BASEIMAGE:aarch64
+  matrix:
+    - ARCH=x86     FROM=alpine:latest                        IMAGE=$BASEIMAGE:x86_64
+    - ARCH=aarch64 FROM=project31/aarch64-alpine-qemu:3.5-7  IMAGE=$BASEIMAGE:aarch64
 
 services:
     - docker
