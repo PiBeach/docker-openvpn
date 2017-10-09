@@ -6,6 +6,9 @@
 #            - ubuntu-toolchain-r-test
 #        packages:
 #            - openvpn
+before_install:
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
 
 env:
     - ARCH=x86     FROM=alpine:latest                       IMAGE=kylemanna/docker-openvpn
