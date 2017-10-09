@@ -3,6 +3,7 @@
 ARG from=alpine:latest
 # Smallest base image
 FROM $from
+ARG from
 
 MAINTAINER Kyle Manna <kyle@kylemanna.com>
 
