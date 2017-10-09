@@ -26,13 +26,13 @@ before_install:
 install:
     - git clone https://github.com/docker-library/official-images.git official-images
 
+stages:
+  - build
+  - manifest
+
 jobs:
   include:
-    - stage: build and test docker image
-# Assist with ci test debugging:
-#   - DEBUG=1
-before_script:
-# prepare qemu
+    - stage: build
       script:
       - if [ $ARCH == 'aarch64' ]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
       - image="$IMAGE"
@@ -44,7 +44,8 @@ before_script:
       - test/run.sh "$image"
       - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
       - docker push "$image"
-    - stage: create manifest
+    - stage: manifest
       env:
         - ARCH=manifest FROM=$BASEIMAGE IMAGE=$BASEIMAGE
-      script: echo manifest 
+      script: 
+      - echo manifest 
