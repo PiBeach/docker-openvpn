@@ -26,29 +26,25 @@ before_install:
 install:
     - git clone https://github.com/docker-library/official-images.git official-images
 
+jobs:
+  include:
+    - stage: build and test docker image
 # Assist with ci test debugging:
 #   - DEBUG=1
 before_script:
 # prepare qemu
-    - if [ $ARCH == 'aarch64' ]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
-    - image="$IMAGE"
-    - docker build --build-arg from=$FROM -t "$image" .
-    - docker inspect "$image"
-    - docker run --rm "$image" openvpn --version || true; # why does it return 1?
-    - docker run --rm "$image" openssl version
-
-script:
-    - official-images/test/run.sh "$image"
-    - test/run.sh "$image"
-
-after_script:
-    - docker images
-
-after_success:
-    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-    docker push "$image"
-
-jobs:
-  include:
-    - stage: deploy
+      script:
+      - if [ $ARCH == 'aarch64' ]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
+      - image="$IMAGE"
+      - docker build --build-arg from=$FROM -t "$image" .
+      - docker inspect "$image"
+      - docker run --rm "$image" openvpn --version || true; # why does it return 1?
+      - docker run --rm "$image" openssl version
+      - official-images/test/run.sh "$image"
+      - test/run.sh "$image"
+      - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+      - docker push "$image"
+    - stage: create manifest
+      env:
+        - ARCH=manifest FROM=$BASEIMAGE IMAGE=$BASEIMAGE
       script: echo manifest 
