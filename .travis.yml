@@ -29,7 +29,7 @@ before_script:
 # prepare qemu
     - if [ $ARCH == 'aarch64' ]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
     - image="$IMAGE"
-    - docker build --build-arg from=alpine:3.5 -t "$image" .
+    - docker build --build-arg from=$FROM -t "$image" .
     - docker inspect "$image"
     - docker run --rm "$image" openvpn --version || true; # why does it return 1?
     - docker run --rm "$image" openssl version
