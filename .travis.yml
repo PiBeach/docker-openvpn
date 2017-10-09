@@ -10,7 +10,7 @@ sudo: required
 
 env:
     - ARCH=x86     FROM=alpine:latest                        IMAGE=project31/docker-openvpn:x86_64
-    - ARCH=aarch64 FROM=project31/aarch64-alpine-qemu:3.5-7  IMAGE=project31/aarch64-docker-openvpn:aarch64
+    - ARCH=aarch64 FROM=project31/aarch64-alpine-qemu:3.5-7  IMAGE=project31/docker-openvpn:aarch64
 
 services:
     - docker
