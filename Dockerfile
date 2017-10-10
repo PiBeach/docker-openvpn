@@ -3,7 +3,9 @@
 ARG from=alpine:latest
 # Smallest base image
 FROM $from
-ARG from
+
+ARG CROSSBUILD=false
+RUN if $CROSSBUILD ; then cross-build-start;
 
 MAINTAINER Kyle Manna <kyle@kylemanna.com>
 
@@ -34,3 +36,5 @@ RUN chmod a+x /usr/local/bin/*
 
 # Add support for OTP authentication using a PAM module
 ADD ./otp/openvpn /etc/pam.d/
+
+RUN if $CROSSBUILD ; then cross-build-end;
