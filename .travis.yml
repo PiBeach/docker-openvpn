@@ -13,8 +13,8 @@ env:
     - BASEIMAGE=project31/docker-openvpn
     - VERSION=latest
   matrix:
-    - ARCH=amd64 CROSSBUILD=false FROM=alpine:latest                        IMAGE=$BASEIMAGE:amd64-$VERSION
-    - ARCH=arm64 CROSSBUILD=true  FROM=project31/aarch64-alpine-qemu:3.5-7  IMAGE=$BASEIMAGE:arm64-$VERSION
+    - ARCH=amd64 FROM=alpine:latest                        IMAGE=$BASEIMAGE:amd64-$VERSION
+    - ARCH=arm64 FROM=project31/aarch64-alpine-qemu:3.5-7  IMAGE=$BASEIMAGE:arm64-$VERSION
 
 services:
     - docker
@@ -32,7 +32,7 @@ script:
 # Set kernel switch to route calls over qemu; virtualization of the appropriate architecture of the container we are building
   - if [ $ARCH == 'arm64' ]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
   - image="$IMAGE"
-  - docker build --build-arg from=$FROM -t --build-arg=$CROSBUILD "$image" .
+  - docker build --build-arg from=$FROM -t "$image" .
   - docker inspect "$image"
   - docker run --rm "$image" openvpn --version || true; # why does it return 1?
   - docker run --rm "$image" openssl version
