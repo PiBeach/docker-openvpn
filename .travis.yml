@@ -30,7 +30,7 @@ install:
 stage: build
 script:
 # Set kernel switch to route calls over qemu; virtualization of the appropriate architecture of the container we are building
-  - if [ $ARCH == 'aarch64' ]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
+  - if [ $ARCH == 'arm64' ]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
   - image="$IMAGE"
   - docker build --build-arg from=$FROM -t --build-arg=$CROSBUILD "$image" .
   - docker inspect "$image"
