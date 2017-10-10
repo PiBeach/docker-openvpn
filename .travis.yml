@@ -13,8 +13,8 @@ env:
     - BASEIMAGE=project31/docker-openvpn
     - VERSION=latest
   matrix:
-    - ARCH=amd64 FROM=alpine:latest                        IMAGE=$BASEIMAGE:amd64-$VERSION
-    - ARCH=arm64 FROM=project31/aarch64-alpine-qemu:3.5-7  IMAGE=$BASEIMAGE:arm64-$VERSION
+    - ARCH=amd64 FROM=multiarch/alpine:amd64-latest IMAGE=$BASEIMAGE:amd64-$VERSION
+    - ARCH=arm64 FROM=multiarch/alpine:arm64-latest IMAGE=$BASEIMAGE:arm64-$VERSION
 
 services:
     - docker
@@ -30,7 +30,7 @@ install:
 stage: build
 script:
 # Set kernel switch to route calls over qemu; virtualization of the appropriate architecture of the container we are building
-  - if [ $ARCH == 'arm64' ]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
+  - if [ $ARCH != 'amd64' ]; then docker run --rm --privileged multiarch/qemu-user-static:register --reset; fi
   - image="$IMAGE"
   - docker build --build-arg from=$FROM -t "$image" .
   - docker inspect "$image"
