@@ -11,7 +11,7 @@ RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing/" >> /etc/apk/reposi
     apk add --update openvpn iptables bash easy-rsa openvpn-auth-pam google-authenticator pamtester && \
     ln -s /usr/share/easy-rsa/easyrsa /usr/local/bin && \
     rm -rf /tmp/* /var/tmp/* /var/cache/apk/* /var/cache/distfiles/* && \
-    setup-timezone -z UTC
+    apk add -U tzdata && setup-timezone -z UTC
 
 # Needed by scripts
 ENV OPENVPN /etc/openvpn
