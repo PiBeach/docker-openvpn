@@ -11,9 +11,10 @@ sudo: required
 env:
   global:
     - BASEIMAGE=project31/docker-openvpn
+    - VERSION=latest
   matrix:
-    - ARCH=x86     FROM=alpine:latest                        IMAGE=$BASEIMAGE:x86_64
-    - ARCH=aarch64 FROM=project31/aarch64-alpine-qemu:3.5-7  IMAGE=$BASEIMAGE:aarch64
+    - ARCH=amd64 FROM=alpine:latest                        IMAGE=$BASEIMAGE:amd64-$VERSION
+    - ARCH=arm64 FROM=project31/aarch64-alpine-qemu:3.5-7  IMAGE=$BASEIMAGE:arm64-$VERSION
 
 services:
     - docker
@@ -46,3 +47,6 @@ jobs:
         - ARCH=manifest FROM=$BASEIMAGE IMAGE=$BASEIMAGE
       script: 
       - echo manifest 
+      - docker run --rm project31/docker-manifest docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"; docker manifest create $BASEIMAGE:$VERSION $BASEIMAGE:amd64-$VERSION $BASEIMAGE:arm64; docker manifest annotate $BASEIMAGE:$VERSION $BASEIMAGE:arm64-$VERSION --os linux --arch arm64; docker manifest annotate $BASEIMAGE:$VERSION $BASEIMAGE:amd64-$VERSION --os linux --arch amd4; docker manifest push $BASEIMAGE:$VERSION
+
+ 
