@@ -13,8 +13,8 @@ env:
     - BASEIMAGE=project31/docker-openvpn
     - VERSION=latest
   matrix:
-    - ARCH=amd64 FROM=multiarch/alpine:amd64-latest IMAGE=$BASEIMAGE:amd64-$VERSION
-    - ARCH=arm64 FROM=multiarch/alpine:arm64-latest IMAGE=$BASEIMAGE:arm64-$VERSION
+    - ARCH=amd64 FROM=multiarch/alpine:amd64-latest-stable IMAGE=$BASEIMAGE:amd64-$VERSION
+    - ARCH=arm64 FROM=multiarch/alpine:arm64-latest-stable IMAGE=$BASEIMAGE:arm64-$VERSION
 
 services:
     - docker
