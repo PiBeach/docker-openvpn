@@ -4,10 +4,7 @@ ARG from=alpine:latest
 # Smallest base image
 FROM $from
 
-ARG CROSSBUILD=false
-RUN if $CROSSBUILD ; then cross-build-start;
-
-MAINTAINER Kyle Manna <kyle@kylemanna.com>
+LABEL maintainer="Kyle Manna <kyle@kylemanna.com>, Kurt Stam <kstam@redhat.com>"
 
 # Testing: pamtester
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing/" >> /etc/apk/repositories && \
@@ -36,5 +33,3 @@ RUN chmod a+x /usr/local/bin/*
 
 # Add support for OTP authentication using a PAM module
 ADD ./otp/openvpn /etc/pam.d/
-
-RUN if $CROSSBUILD ; then cross-build-end;
